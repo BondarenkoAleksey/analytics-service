@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
-    POSTGRES_PORT: str = "5432"
+    POSTGRES_PORT: int = 5432
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
 
     # Валидатор: автоматически собирает DSN строку из отдельных полей
@@ -31,7 +31,7 @@ class Settings(BaseSettings):
         )
 
     # ClickHouse для аналитики (отдельный валидатор можно добавить)
-    CLICKHOUSE_SERVER: str
+    CLICKHOUSE_SERVER: str = "localhost"
     CLICKHOUSE_DB: str = "analytics"
 
     # Redis для кеша и Celery broker/backend
