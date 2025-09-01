@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
-    POSTGRES_PORT: int = 5432
+    POSTGRES_PORT: int = 5433
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
 
     # Валидатор: автоматически собирает DSN строку из отдельных полей
