@@ -19,12 +19,16 @@ class EventRepository:
         """
         # Создаем экземпляр ORM-модели из данных Pydantic-схемы.
         db_event = Event(**event_create.model_dump())
-        # Добавляем его в сессию.
+
+        # Добавляем его в сессию
         self.session.add(db_event)
-        # Ждем, пока сессия не "сфлашит" изменения в БД и не получит ID.
-        await self.session.flush()
-        # Обновляем наш объект данными из БД (например, created_at).
+
+        # ✅ Сохраняем изменения в базе
+        await self.session.commit()
+
+        # ✅ Обновляем объект из базы, чтобы все поля (id, timestamps и т.д.) были доступны
         await self.session.refresh(db_event)
+
         return db_event
 
     async def get_by_id(self, event_id: int) -> Event | None:

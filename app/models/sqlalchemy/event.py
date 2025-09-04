@@ -24,3 +24,14 @@ class Event(Base):
 
     # Дополнительное текстовое поле для демонстрации или хранения неструктурированных данных.
     comment: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "event_type": self.event_type,
+            "user_id": self.user_id,
+            "data": self.data,
+            "comment": self.comment,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+        }

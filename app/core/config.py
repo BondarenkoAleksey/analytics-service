@@ -35,7 +35,7 @@ class Settings(BaseSettings):
     CLICKHOUSE_DB: str = "analytics"
 
     # Redis для кеша и Celery broker/backend
-    REDIS_URI: RedisDsn
+    REDIS_URI: str
 
     # RabbitMQ для сообщений (aio-pika)
     RABBITMQ_URI: AmqpDsn
@@ -47,7 +47,6 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         case_sensitive = True
-
 
 # Создаем инстанс настроек, который будем импортировать по всему проекту
 settings = Settings()
