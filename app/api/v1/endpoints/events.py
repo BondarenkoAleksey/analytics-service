@@ -1,5 +1,4 @@
-from alembic.util import status
-from fastapi import FastAPI, APIRouter, Depends
+from fastapi import FastAPI, APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.repositories.event import EventRepository
@@ -20,14 +19,14 @@ async def create_event(
         event_data: EventCreate,
         db: AsyncSession = Depends(get_db),
 ) -> EventResponse:
-    """
-    Create a new analytics event.
-    """
-    repo = EventRepository(session=db)
-    new_event = await repo.create(event_create=event_data)
-    await db.refresh(new_event)
+    """Create a new analytics event."""
+    try:
+        repo = EventRepository(session=db)
+        new_event = await repo.create(event_create=event_data)
 
+        # Отправляем задачу в Celery для фоновой обработки
+        process_event_task.delay(new_event.to_dict())
 
-    # Отправляем задачу в Celery для фоновой обработки
-    process_event_task.delay(new_event.to_dict())
-    return new_event
+        return new_event
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
